@@ -13,10 +13,10 @@ In summary, the Arm Enterprise ACS product contains the following: <ol>
 These tests are split between UEFI and Linux (supported by corresponding kernel driver) applications that together determine whether an architectural implementation is compliant with the enterprise specifications. These tests are further described in detail.
 
 ## Release details
- - Code Quality: REL v3.0
- - **The latest pre-built release of ACS is available for download here: [v20.10_REL3.0](https://github.com/ARM-software/arm-enterprise-acs/tree/release/prebuilt_images/v20.10_REL3.0)**
+ - Code Quality: REL v3.1
+ - **The latest pre-built release of ACS is available for download here: [v21.09_REL3.1](https://github.com/ARM-software/arm-enterprise-acs/tree/release/prebuilt_images/v21.09_REL3.1)**
  - The SBSA tests are written for version 6.0 of the SBSA specification.
- - The SBBR tests are written for version 1.2 of the SBBR specification.
+ - The SBBR tests are written for version 1.0 of the BBR specification.
  - The compliance suite is not a substitute for design verification.
  - To review the ACS logs, Arm licensees can contact Arm directly through their partner managers.
 
@@ -33,11 +33,10 @@ These tests are split between UEFI and Linux (supported by corresponding kernel 
 
 ### Prerequisites
 Before starting the ACS build, ensure that the following requirements are met:
- - Ubuntu 18.04 LTS with at least 64GB of free disk space (build on Ubuntu 20.04 is also supported from this version).
+ - Ubuntu 18.04 LTS or Ubuntu 20.04 with at least 64GB of free disk space.
  - Must use Bash shell.
- - Build is supported on x86 or aarch64 machines.
+ - Build is supported on x86 and aarch64 machines.
 
-Note : Windows build steps will be provided in the future releases.
 <br />
 
 Perform the following steps to start the ACS build:
@@ -80,8 +79,8 @@ For more information, see [Yocto Project](https://www.yoctoproject.org/documenta
 
 ### Juno Reference Platform
 
-Follow the instructions [here](https://community.arm.com/docs/DOC-10804) to install an EDK2 (UEFI) prebuilt configuration on your Juno board.
-For additional information, see the FAQs and tutorials [here](https://community.arm.com/groups/arm-development-platforms) or contact [juno-support@arm.com](mailto:juno-support@arm.com).
+Click [here](https://releases.linaro.org/members/arm/platforms/) to download and install the an EDK2 (UEFI) prebuilt configuration on your Juno board.
+For additional information, see the [Juno User Guide](https://git.linaro.org/landing-teams/working/arm/arm-reference-platforms.git/about/docs/juno/user-guide.rst) or contact [juno-support@arm.com](mailto:juno-support@arm.com).
 
 
 After installing the EDK2 prebuilt configuration on your Juno board, follow these steps:
@@ -132,13 +131,13 @@ The live image boots to UEFI Shell. The different test applications can be run i
 - [Linux UEFI Validation OS](https://github.com/intel/luv-yocto)
         - SHA: 73f995b61a7b1b856a082203cbeb744a3f21880d
 
-- [Firmware Test Suite (FWTS) TAG: V20.08.00](http://kernel.ubuntu.com/git/hwe/fwts.git)
+- [Firmware Test Suite (FWTS) TAG: V21.08.00](http://kernel.ubuntu.com/git/hwe/fwts.git)
   Note: For improved FTWS test coverage, use release images of ACSv2.5 or higher
 
 - [Server Base System Architecture (SBSA)](https://github.com/ARM-software/sbsa-acs) TAG: 1b3a37214fe6809e07e471f79d1ef856461bc803
 
-- [UEFI Self Certification Tests (UEFI-SCT)](https://github.com/tianocore/edk2-test) TAG: b558bad25479ec83d43399673d7580294c81c8f8
-Note: UEFI-SCT is based on edk2-test release (tag:edk2-test-stable201910) which supports UEFI Specifications version 2.7
+- [UEFI Self Certification Tests (UEFI-SCT)](https://github.com/tianocore/edk2-test) TAG: f3b3456152dacf26ec0abaa0c21a9432cc176630
+Note: UEFI-SCT is based on edk2-test release (tag:edk2-test-stable202108) which supports UEFI Specifications version 2.7
 Refer to https://uefi.org/testtools for more details
 
 
