@@ -35,9 +35,7 @@ These tests are split between UEFI and Linux (supported by corresponding kernel 
 Before starting the ACS build, ensure that the following requirements are met:
  - Ubuntu 18.04 LTS or Ubuntu 20.04 with at least 64GB of free disk space.
  - Must use Bash shell.
- - Build is supported on x86 and aarch64 machines.
-
-<br />
+ - Build is supported on x86 and AArch64 machines.<br />
 
 Perform the following steps to start the ACS build:
 
@@ -77,40 +75,40 @@ For more information, see [Yocto Project](https://www.yoctoproject.org/documenta
 
 ## Test Suite Execution
 
-### Juno Reference Platform
+Note: UEFI EDK2 setting for "Console Preference": The default is "Graphical". When that is selected, Linux output will go only to the graphical console (HDMI monitor). To force serial console output, you may change the "Console Preference" to "Serial".
 
-Click [here](https://releases.linaro.org/members/arm/platforms/) to download and install the an EDK2 (UEFI) prebuilt configuration on your Juno board.
-For additional information, see the [Juno User Guide](https://git.linaro.org/landing-teams/working/arm/arm-reference-platforms.git/about/docs/juno/user-guide.rst) or contact [juno-support@arm.com](mailto:juno-support@arm.com).
+### Verification of the luv-live-image on the Arm Neoverse N2 reference design (RD-N2)
+
+#### Prerequisites
+- If the system supports LPIs (Interrupt ID > 8192) then Firmware should support installation of handler for LPI interrupts.
+    - If you are using edk2, change the ArmGic driver in the ArmPkg to support installation of handler for LPIs.
+    - Add the following in \<path to RDN2 software stack\>/uefi/edk2/ArmPkg/Drivers/ArmGic/GicV3/ArmGicV3Dxe.c
+>        - After [#define ARM_GIC_DEFAULT_PRIORITY  0x80]
+>          +#define ARM_GIC_MAX_NUM_INTERRUPT 16384
+>        - Change this in GicV3DxeInitialize function.
+>          -mGicNumInterrupts      = ArmGicGetMaxNumInterrupts (mGicDistributorBase);
+>          +mGicNumInterrupts      = ARM_GIC_MAX_NUM_INTERRUPT;
+
+#### Follow the steps mentioned in [RD-N2 platform software user guide](https://gitlab.arm.com/arm-reference-solutions/arm-reference-solutions-docs/-/tree/master/docs/infra/rdn2) to obtain RD-N2 FVP.
+
+### For software stack build instructions follow Busybox Boot link under Supported Features by RD-N2 platform software stack section in the same guide.
+
+Note: RD-N2 should be built with the GIC Changes mentioned in Prerequisites.<br />
+Note: sudo permission will be required by building software stack.
 
 
-After installing the EDK2 prebuilt configuration on your Juno board, follow these steps:
+#### Verifying the pre-built image
 
-1. Burn the LUV OS bootable image to a USB stick: <br />
-$ lsblk <br />
-$ sudo dd if=/path/to/luv-live-image-gpt.img of=/dev/sdX <br />
-$ sync <br />
-Note: Replace '/dev/sdX' with the handle corresponding to your
-  USB stick as identified by the `lsblk' command.
-2. Insert the USB stick into one of the Juno's rear USB ports.
-3. Power cycle the Juno.
-
-### Fixed Virtual Platform (FVP) environment
-
-The steps for running the Arm Enterprise ACS on an FVP are the
-same as those for running on Juno but with a few exceptions:
-
-- Follow the different instructions [here](https://community.arm.com/dev-platforms/b/documents/posts/using-linaros-deliverables-on-an-fvp) to install an EDK2 (UEFI) prebuilt configuration on your FVP.
-- Modify 'run_model.sh' to add a model command argument that
-  loads 'luv-live-image-gpt.img' as a virtual disk image. For example,
-  if running on the AEMv8-A Base Platform FVP, add
-
-    `bp.virtioblockdevice.image path=<work_dir>/arm-enterprise- acs/luv/build/tmp/deploy/images/qemuarm64/luv-live-image-gpt.img'
-
-    to your model options. <br />
-Or, <br />
-To launch the FVP model with script ‘run_model.sh’ that supports -v option for virtual disk image, use the following command:
-
-    $ ./run_model.sh -v &lt;work_dir>/arm-enterprise-acs/luv/build/tmp/deploy/images/qemuarm64/luv-live-image-gpt.img
+1. Set the environment variable 'MODEL'
+```
+export MODEL=<absolute path to the RD-N2 FVP binary/FVP_RD_N2>
+```
+2. Launch the RD-N2 FVP with the pre-built image with the below command
+```
+cd /path to RD-N2_FVP platform software/model-scripts/rdinfra/platforms/rdn2
+./run_model.sh -v /path-to-luv-live-image/luv-live-image-gpt.img
+```
+This will start the luv live image automation and run the test suites in sequence.
 
 ### Automation
 The test suite execution can be automated or manual. Automated execution is the default execution method when no key is pressed during boot. <br />
